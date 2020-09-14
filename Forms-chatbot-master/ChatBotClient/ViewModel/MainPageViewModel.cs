@@ -56,51 +56,61 @@ namespace ChatBotClient.ViewModel
         public ICommand SendMessageCommand { get; set; }
         public async void SendMessage()
         {
-            Messages.Add(new MessageViewModel { Text = outgoingText, IsIncoming = false, MessagDateTime = DateTime.Now.AddMinutes(-25) });
-            postResult = JsonConvert.DeserializeObject<PostResult>(await PostAsync(botUriChat, content));
-            if (postResult != null)
+            try
             {
-                //if (firstMessage)
-                //{
-                //    getResult = JsonConvert.DeserializeObject<GetResult>(await chatClient.GetStringAsync(botUriChat));
-                //    firstMessage = false;
-                //}
+                Messages.Add(new MessageViewModel { Text = outgoingText, IsIncoming = false, MessagDateTime = DateTime.Now.AddMinutes(-25) });
+                // postResult = JsonConvert.DeserializeObject<PostResult>(await PostAsync(botUriChat, content));
+                /// if (postResult != null)
+                {
+                    //if (firstMessage)
+                    //{
+                    //    getResult = JsonConvert.DeserializeObject<GetResult>(await chatClient.GetStringAsync(botUriChat));
+                    //    firstMessage = false;
+                    //}
 
-                //else
-                //{
-                //    string jsonResultFromBot = await chatClient.GetStringAsync(botUriChat + "?watermark=" + getResult.watermark);
-                //    getResult = JsonConvert.DeserializeObject<GetResult>(jsonResultFromBot);
-                //}
+                    //else
+                    //{
+                    //    string jsonResultFromBot = await chatClient.GetStringAsync(botUriChat + "?watermark=" + getResult.watermark);
+                    //    getResult = JsonConvert.DeserializeObject<GetResult>(jsonResultFromBot);
+                    //}
 
-                //for (int i = 1; i < getResult.activities.Count; i++)
-                //{
-                //    if (getResult.activities[i].attachments.Count > 0)
-                //    {
-                //        foreach (var content in getResult.activities[i].attachments)
-                //        {
-                //            StringBuilder message = new StringBuilder();
+                    //for (int i = 1; i < getResult.activities.Count; i++)
+                    //{
+                    //    if (getResult.activities[i].attachments.Count > 0)
+                    //    {
+                    //        foreach (var content in getResult.activities[i].attachments)
+                    //        {
+                    //            StringBuilder message = new StringBuilder();
 
-                //            message.AppendLine(content.content.text);
+                    //            message.AppendLine(content.content.text);
 
-                //            foreach (var button in content.content.buttons)
-                //            {
-                //                message.AppendLine(button.title);
-                //            }
-                //            Messages.Add(new MessageViewModel { Text = "Bot: " + message.ToString(), IsIncoming = true, MessagDateTime = DateTime.Now.AddMinutes(-25) });
+                    //            foreach (var button in content.content.buttons)
+                    //            {
+                    //                message.AppendLine(button.title);
+                    //            }
+                    //            Messages.Add(new MessageViewModel { Text = "Bot: " + message.ToString(), IsIncoming = true, MessagDateTime = DateTime.Now.AddMinutes(-25) });
 
-                //        }
-                //    }
-                //    else
-                //    {
-                //        Messages.Add(new MessageViewModel { Text = "Bot: " + getResult.activities[i].text, IsIncoming = true, MessagDateTime = DateTime.Now.AddMinutes(-25) });
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        Messages.Add(new MessageViewModel { Text = "Bot: " + getResult.activities[i].text, IsIncoming = true, MessagDateTime = DateTime.Now.AddMinutes(-25) });
 
-                //    }
-                //}
+                    //    }
+                    //}
+
+                    //  Messages.Add(new MessageViewModel { Text = "Bot: " + "try pull to refresh", IsIncoming = true, MessagDateTime = DateTime.Now.AddMinutes(-25) });
+                }
 
                 Messages.Add(new MessageViewModel { Text = "Bot: " + "try pull to refresh", IsIncoming = true, MessagDateTime = DateTime.Now.AddMinutes(-25) });
-            }
 
-            OutGoingText = string.Empty;
+
+                OutGoingText = string.Empty;
+            }catch(Exception ex)
+            {
+
+
+            }
 
         }
         #endregion
@@ -110,10 +120,17 @@ namespace ChatBotClient.ViewModel
             StringContent content = new StringContent("", Encoding.UTF8, "application/json");
             try
             {
-                string result = await PostAsync(botUriStartConversation, content);
-                messageRequest = JsonConvert.DeserializeObject<MessageRequest>(result);
-                botUriChat = String.Format(botUriChat, messageRequest.conversationId);
-                Messages.Add(new MessageViewModel { Text = "Bot: how can I help u", IsIncoming = true, MessagDateTime = DateTime.Now.AddMinutes(-25) });
+                //string result = await PostAsync(botUriStartConversation, content);
+                //messageRequest = JsonConvert.DeserializeObject<MessageRequest>(result);
+                //botUriChat = String.Format(botUriChat, messageRequest.conversationId);
+
+                MessageViewModel temp = new MessageViewModel();
+                temp.Text = "Bot: how can I help u";
+                temp.IsIncoming = true;
+                temp.MessagDateTime = DateTime.Now.AddMinutes(-25);
+                Messages.Add(temp);
+
+               // Messages.Add(new MessageViewModel { Text = "Bot: how can I help u", IsIncoming = true, MessagDateTime = DateTime.Now.AddMinutes(-25) });
 
             }
             catch (Exception ex)
@@ -154,32 +171,38 @@ namespace ChatBotClient.ViewModel
 
         public MainPageViewModel()
         {
-            SendMessageCommand = new Command(SendMessage);
-            getResult = new GetResult();
-            firstMessage = true;
-
-            botUriStartConversation = "https://directline.botframework.com/v3/directline/conversations/";
-            botUriChat = "https://directline.botframework.com/v3/directline/conversations/{0}/activities";
-            botSecret = "_mVKnEKCmM8.cwA.5XA.gSXRFS_SgSX3kWWJfHwnwXHodV5KwubNLqB4BXA5mN0";
-            //"UhG0pRRMQFk.cwA._KU.6J6uMpDCs2jnMcoGbGniSYLPTaIwzYKj2va11PA3O4U";
-            chatClient = new HttpClient();
-            startConversationClient = new HttpClient();
-            chatClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + botSecret);
-            startConversationClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + botSecret);
-
-            StartConversation();
-
-
-            // Initialize with default values
-            Messages = new ObservableCollection<MessageViewModel>();
-
-            OutGoingText = null;
-            SendCommand = new Command(() =>
+            try
             {
-                SendMessage();
-            });
+                SendMessageCommand = new Command(SendMessage);
+                getResult = new GetResult();
+                firstMessage = true;
+
+                botUriStartConversation = "https://directline.botframework.com/v3/directline/conversations/";
+                botUriChat = "https://directline.botframework.com/v3/directline/conversations/{0}/activities";
+                botSecret = "_mVKnEKCmM8.cwA.5XA.gSXRFS_SgSX3kWWJfHwnwXHodV5KwubNLqB4BXA5mN0";
+                //"UhG0pRRMQFk.cwA._KU.6J6uMpDCs2jnMcoGbGniSYLPTaIwzYKj2va11PA3O4U";
+                chatClient = new HttpClient();
+                startConversationClient = new HttpClient();
+                chatClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + botSecret);
+                startConversationClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + botSecret);
+
+                // Initialize with default values
+                Messages = new ObservableCollection<MessageViewModel>();
+                StartConversation();
+
+
+               
+
+                OutGoingText = null;
+                SendCommand = new Command(() =>
+                {
+                    SendMessage();
+                });
+            }catch(Exception ex)
+            {
+
+
+            }
         }
-
-
     }
 }

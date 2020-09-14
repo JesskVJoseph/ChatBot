@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewCell xmlns:view="clr-namespace:ChatBotClient.View"  xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ChatBotClient.View.Cells.IncomingCell" xmlns:plugin="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions">
+<ViewCell xmlns:view="clr-namespace:ChatBotClient.View"  xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ChatBotClient.View.Cells.IncomingCell"
+          xmlns:plugin="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin">
 	<Grid ColumnSpacing="2" Padding="5">
  <Grid.ColumnDefinitions>
    <ColumnDefinition Width="40"></ColumnDefinition>
@@ -11,7 +12,7 @@
     <RowDefinition Height="Auto"></RowDefinition>
 
   </Grid.RowDefinitions>
-  <plugin:CircleImage
+  <!--<plugin:CircleImage
                     Grid.Row="0"
                     Grid.Column="0"
                     HeightRequest="35"
@@ -20,7 +21,7 @@
                     BorderColor="#03A9F4"
                     Aspect="AspectFill"
                     HorizontalOptions="Center"
-                    VerticalOptions="Center" Source="{view:ImageResource Source=DataTemplateSelector.humberto.png}" ></plugin:CircleImage>
+                    VerticalOptions="Center" Source="{view:ImageResource Source=DataTemplateSelector.humberto.png}" ></plugin:CircleImage>-->
 <Frame Grid.Row="0" OutlineColor="Transparent" HasShadow="False" Grid.Column="1" BackgroundColor="#03A9F4">
   <Label TextColor="White" Text="{Binding Text}" />
 </Frame>
